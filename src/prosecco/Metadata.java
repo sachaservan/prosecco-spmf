@@ -15,9 +15,9 @@ class Transaction implements Comparable<Transaction>
 {
     public int[] sequence; 
     public int numItems;  
-    public int priority;
+    public long priority;
     
-    public Transaction(int[] seq, int count, int priority) {
+    public Transaction(int[] seq, int count, long priority) {
     	this.numItems = count;
     	this.sequence = seq;
     	this.priority = priority;
@@ -25,7 +25,7 @@ class Transaction implements Comparable<Transaction>
     
     @Override
     public int compareTo(Transaction trans) {
-        return trans.priority - priority;
+        return (int)(trans.priority - priority);
     }
 };
 
@@ -39,7 +39,7 @@ public class Metadata {
 
     private boolean topK;
     
-    private int capacity;
+    private long capacity;
         
     
     // current number of iterations (batches) processed
@@ -50,7 +50,7 @@ public class Metadata {
     // keep a sorted priority list of transactions for computing the capacity of a block
     private List<Transaction> capSequences;
     
-    private int sIndex;
+    private long sIndex;
     
     public Metadata(double errorTolerance, boolean topK, int blockSize, int dbSize) {
         this.errorTolerance = errorTolerance;
@@ -65,13 +65,9 @@ public class Metadata {
         numSequencesProcessed++;
  
         // check if the transaction should be considered
-        if ((int) Math.pow(2, numItems) - 1 > capacity)  
+        if ((long) Math.pow(2, numItems) > (long) Math.pow(2, sIndex))  
         {   
-
-	          int c = getCapBound(seq);
-	          if (c < capacity)
-	        	  return;
-	          
+	        long c = getCapBound(seq);  
 	        capacity = c;
 	        capSequences.add(new Transaction(seq, numItems, c));
             Collections.sort(capSequences);
@@ -81,8 +77,8 @@ public class Metadata {
             }
             
             sIndex = capSequences.size();
-//    		System.out.println(" sIndex: " + Integer.toString(sIndex));
-//    		System.out.println(" new capacity: " + Integer.toString(capacity));
+//   		System.out.println(" sIndex: " + Long.toString(sIndex));
+//   		System.out.println(" new capacity: " + Long.toString(capacity));
         } 
         
     }
@@ -145,7 +141,7 @@ public class Metadata {
 
 
 
-	private int getCapBound(int[] sequence) {
+	private long getCapBound(int[] sequence) {
 		
 		LinkedList<Itemset> list = new LinkedList<Itemset>();
 		Itemset it = new Itemset();
@@ -164,7 +160,7 @@ public class Metadata {
 		}
 				
 		// 2^||sequence|| -1
-		int c = (int) Math.pow(2, length) - 1;
+		long c = (long) Math.pow(2, length) - 1;
 
 		while(list.size() > 1) {
 			Itemset itA = list.pop();
@@ -207,7 +203,7 @@ public class Metadata {
 
 
 
-	public int getsIndex() {
+	public long getsIndex() {
 		return sIndex;
 	}
 	
