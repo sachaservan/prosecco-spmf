@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import spam.*;
 import prefixspan.AlgoPrefixSpan;
 import prefixspan.MemoryLogger;
 import prefixspan.SequentialPatterns;
@@ -64,6 +65,7 @@ public class Main {
 		boolean runPrefixSpan = true;
 		boolean benchmarkRuntime = false;
 		boolean benchmarkMemory = false;
+		boolean runSPAM = false;
 		boolean print = false;
 
 		for (Option opt : optsList) {
@@ -94,6 +96,10 @@ public class Main {
 		
 		if (doubleOptsList.contains("benchmarkRuntime")) {
 			benchmarkRuntime = true;
+		}
+		
+		if (doubleOptsList.contains("spam")) {
+			runSPAM = true;
 		}
 		
 		
@@ -140,7 +146,16 @@ public class Main {
 		if (minsup == -1) {
 			throw new IllegalArgumentException("Min support not specified");
 		}
-
+		
+		if (runSPAM) {
+			System.out.println("BENCHMARKING RUNTIME AND MEMORY USAGE SPAM");
+			runSPAMRuntimeAndMemoryBenchmark(benchmarkID, inputFile, outputFile, minsup, numTrials);
+			return;
+		
+		} 
+		
+		
+		// get the correct results to benchmark correctness of prosecco
 		if (benchmarkRuntime && !benchmarkMemory && !runPrefixSpan) {
 
 			try {
@@ -202,7 +217,7 @@ public class Main {
 			} else {
 				runPrefixSpanAlgorithm(inputFile, outputFile, minsup);
 			}
-		}
+		}	
 
 	}
 
@@ -408,6 +423,43 @@ public class Main {
 				e.printStackTrace();
 			}
 
+			BenchmarkRun run = new BenchmarkRun(
+					i,
+					runtime,
+					MemoryLogger.getInstance().getMemoryUsage()
+					);
+
+			report.addRun(run);
+		}
+
+		BenchmarkUtils.saveBenchmarksToJSON(report, outputFile);
+	}
+	
+	private static void runSPAMRuntimeAndMemoryBenchmark(
+			String benchmarkID,
+			String inputFile, 
+			String outputFile, 
+			double minsup, 
+			int numRuns) {
+
+		BenchmarkReport report = new BenchmarkReport(benchmarkID, minsup, inputFile);
+
+		for (int i = 0; i < numRuns; i++) {
+
+			long runtime = 0;
+				MemoryLogger.getInstance().reset();
+				long startTime = System.currentTimeMillis();
+				// Create an instance of the algorithm 
+				AlgoSPAM algo = new AlgoSPAM(); 
+				try {
+					algo.runAlgorithm(inputFile, "/tmp/out.txt", minsup);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}    
+				runtime = System.currentTimeMillis() - startTime;
+				algo.printStatistics();
+
+			
 			BenchmarkRun run = new BenchmarkRun(
 					i,
 					runtime,
