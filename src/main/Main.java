@@ -156,7 +156,7 @@ public class Main {
 		
 		
 		// get the correct results to benchmark correctness of prosecco
-		if (benchmarkRuntime && !benchmarkMemory && !runPrefixSpan) {
+		if (benchmarkRuntime && !benchmarkMemory && !runPrefixSpan && !runSPAM) {
 
 			try {
 				AlgoPrefixSpan alg = new AlgoPrefixSpan();
