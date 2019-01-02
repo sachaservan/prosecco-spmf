@@ -270,7 +270,6 @@ public class Main {
 					falsePositivesPerBlock.add(falsePositives);
 					falseNegativesPerBlock.add(falseNegatives);
 				}	
-
 			};
 
 			AlgoProsecco alg = new AlgoProsecco(callback);

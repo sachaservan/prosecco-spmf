@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import main.BenchmarkUtils;
 import prefixspan.*;
 
 /*** 
@@ -110,6 +111,8 @@ public class AlgoSPAM{
 		// to log the memory used
 		MemoryLogger.getInstance().reset(); 
 		
+		MemoryLogger.getInstance().checkMemory();
+
 		// record start time
 		startTime = System.currentTimeMillis(); 
 		// RUN THE ALGORITHM
@@ -130,6 +133,9 @@ public class AlgoSPAM{
 		// the structure to store the vertical database
 		// key: an item    value : bitmap
 		verticalDB = new HashMap<Integer, Bitmap>();
+		
+		MemoryLogger.getInstance().checkMemory();
+
 		
 		// STEP 0: SCAN THE DATABASE TO STORE THE FIRST BIT POSITION OF EACH SEQUENCE 
 		// AND CALCULATE THE TOTAL NUMBER OF BIT FOR EACH BITMAP
@@ -261,6 +267,9 @@ public class AlgoSPAM{
 			// items.
 			dfsPruning(prefix, entry.getValue(), frequentItems, frequentItems, entry.getKey(), 2);
 		}
+		
+		MemoryLogger.getInstance().checkMemory();
+
 	}
 	
 	/**
@@ -276,6 +285,8 @@ public class AlgoSPAM{
 	private void dfsPruning(Prefix prefix, Bitmap prefixBitmap, List<Integer> sn, List<Integer> in, int hasToBeGreaterThanForIStep, int m) throws IOException {
 //		System.out.println(prefix.toString());
 		
+		MemoryLogger.getInstance().checkMemory();
+
 		//  ======  S-STEPS ======
 		// Temporary variables (as described in the paper)
 		List<Integer> sTemp = new ArrayList<Integer>();
@@ -378,6 +389,8 @@ public class AlgoSPAM{
         }
 		writer.write(r.toString());
 		writer.newLine();
+		MemoryLogger.getInstance().checkMemory();
+
 	}
 	
 	/**
@@ -411,6 +424,9 @@ public class AlgoSPAM{
 		writer.write(r.toString());
 //		System.out.println(r.toString());
 		writer.newLine();
+		
+		MemoryLogger.getInstance().checkMemory();
+
 	}
 
 	/**
