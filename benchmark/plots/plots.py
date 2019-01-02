@@ -71,12 +71,16 @@ def loadPrecisionRecallData(fn):
     return d
 
 def loadMemoryData(fn):
+    memory = []
     d = {'time': [], 'memory': [], 'run': []}
     data = json.load(open(fn))
     run_cnt = 0
     step = 2000
     for run in data['runs']:
         bt = run['memoryUsagePerTimeInMillis']
+
+        for b in bt:
+            memory.append(bt[b])
         interval = 0
         interval_values = []
         times = [float(t) for t in bt]
@@ -101,7 +105,7 @@ def loadMemoryData(fn):
                 d['time'].append(int((bin)))
                 d['memory'].append(np.mean(values))
         run_cnt += 1    
-    return d
+    return d, memory
 
 def loadTruePositives(fn):
     data = json.load(open(fn))
@@ -225,7 +229,7 @@ def getRuntime(fn):
     return runtimes
     
 
-def main(runtimes, id, file_id, title, show):
+def main(runtimes, memory, id, file_id, title, show):
     prosecco_runtime = '../results/n_ps-' + id + '-10k_results_runtime_correctness.json'
     prefixspan_runtime = '../results/n_ps-' + id + '-10k_results_prefixspan.json'
     spam_runtime = '../results/n_ps-' + id + '-10k_results_spam.json'
@@ -233,11 +237,13 @@ def main(runtimes, id, file_id, title, show):
     # eval runtime
     runtimes_prosecco = getRuntime(prosecco_runtime)
     runtimes_prefixspan = getRuntime(prefixspan_runtime)
+    runtimes_prefixspan = getRuntime(spam_runtime)
     
     print(title, np.mean(runtimes_prosecco), np.std(runtimes_prosecco), np.mean(runtimes_prefixspan), np.std(runtimes_prefixspan))
 
     runtimes['prefixspan'][title] = runtimes_prefixspan
     runtimes['prosecco'][title] = runtimes_prosecco
+    runtimes['spam'][title] = runtimes_prefixspan
 
     tp = loadTruePositives(prosecco_runtime)
     file_id = file_id + '-' + str(tp)
@@ -245,15 +251,23 @@ def main(runtimes, id, file_id, title, show):
     # MEMORY
     f, (ax1) = plt.subplots(1, 1, sharey=False, figsize=(5, 3.5)) 
     
-    d = loadMemoryData('../results/n_ps-' + id + '-10k_results_memory.json')
+    d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_memory.json')
+    memory['prosecco'][title] = mem
     df = pd.DataFrame(data=d)   
     df = df.sort_values(by=['time'])
     plot_ts(df, ax1, flatui[0], 'memory', 'time', -1, 'ProSecCo', linestyle = '-')
 
-    d = loadMemoryData('../results/n_ps-' + id + '-10k_results_prefixspan.json')
+    d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_prefixspan.json')
+    memory['prefixspan'][title] = mem
     df = pd.DataFrame(data=d)       
     df = df.sort_values(by=['time'])
     plot_ts(df, ax1, flatui[1], 'memory', 'time', -1, 'PrefixSpan', linestyle = ':')
+
+    d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_spam.json')
+    memory['spam'][title] = mem
+    df = pd.DataFrame(data=d)       
+    df = df.sort_values(by=['time'])
+    plot_ts(df, ax1, flatui[2], 'memory', 'time', -1, 'SPAM', linestyle = ':')
 
     ax1.set_ylabel('Memory (GB)')
     ax1.set_xlabel('Time (mm:ss)')
@@ -373,35 +387,41 @@ def main(runtimes, id, file_id, title, show):
 if __name__== '__main__':
     show = False
     
-    runtimes = {'prefixspan': {}, 'prosecco': {}}
+    runtimes = {'prefixspan': {}, 'prosecco': {}, 'spam': {}}
+    memory = {'prefixspan': {}, 'prosecco': {}, 'spam': {}}
 
     print('Dataset', 'PS-Mean', 'PS-STD', 'IPS-Mean', 'IPS-STD')
 
-    (s, p) = main(runtimes, 'accidents-lg-0.80', 'accidents-5-0_80', 'ACCIDENTS-0.80', show)
-    (s, p) = main(runtimes, 'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show)
-    (s, p) = main(runtimes, 'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show)
+    (s, p) = main(runtimes, memory, 'accidents-lg-0.80', 'accidents-5-0_80', 'ACCIDENTS-0.80', show)
+    (s, p) = main(runtimes, memory,'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show)
+    (s, p) = main(runtimes, memory,'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show)
 
-    (s, p) = main(runtimes, 'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show)
-    (s, p) = main(runtimes, 'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show)
-    (s, p) = main(runtimes, 'bms-webview-lg-0.05', 'bms-webview-100-0_005', 'BMS-0.05', show)
+    print(memory['spam']["ACCIDENTS-0.85"])
 
-    (s, p) = main(runtimes, 'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show)
-    (s, p) = main(runtimes, 'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show)
-    (s, p) = main(runtimes, 'kosarak-lg-0.10', 'kosarak-50-0_20', 'KORSARAK-0.10', show)
+    (s, p) = main(runtimes, memory,'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show)
+    (s, p) = main(runtimes, memory,'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show)
+    (s, p) = main(runtimes, memory,'bms-webview-lg-0.05', 'bms-webview-100-0_005', 'BMS-0.05', show)
 
-    (s, p) = main(runtimes, 'msnbc-lg-0.20', 'msnbc-200-0_20', 'MSNBC-0.20', show)
-    (s, p) = main(runtimes, 'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show)
-    (s, p) = main(runtimes, 'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show)
+    (s, p) = main(runtimes, memory,'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show)
+    (s, p) = main(runtimes, memory,'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show)
+    (s, p) = main(runtimes, memory,'kosarak-lg-0.10', 'kosarak-50-0_10', 'KORSARAK-0.10', show)
+
+    (s, p) = main(runtimes, memory,'msnbc-lg-0.20', 'msnbc-200-0_20', 'MSNBC-0.20', show)
+    (s, p) = main(runtimes, memory,'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show)
+    (s, p) = main(runtimes, memory,'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show)
     
-    (s, p) = main(runtimes, 'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show)
-    (s, p) = main(runtimes, 'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show)
-    (s, p) = main(runtimes, 'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show)
+    (s, p) = main(runtimes, memory,'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show)
+    (s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show)
+    (s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show)
     
-    (s, p) = main(runtimes, 'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show)
-    (s, p) = main(runtimes, 'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show)
-    (s, p) = main(runtimes, 'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show)
+    (s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show)
+    (s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show)
+    (s, p) = main(runtimes, memory,'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show)
 
     
     with open('runtimes.pickle', 'wb') as handle:
         pickle.dump(runtimes, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    with open('memory.pickle', 'wb') as handle:
+        pickle.dump(memory, handle, protocol=pickle.HIGHEST_PROTOCOL)
     
