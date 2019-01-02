@@ -158,6 +158,7 @@ public class Main {
 		
 		// get the correct results to benchmark correctness of prosecco
 		if (benchmarkRuntime && !benchmarkMemory && !runPrefixSpan && !runSPAM) {
+			System.out.println("COMPUTING CORRECT RESULTS");
 
 			try {
 				AlgoPrefixSpan alg = new AlgoPrefixSpan();
@@ -467,7 +468,9 @@ public class Main {
 					algo.runAlgorithm(inputFile, "/tmp/out.txt", minsup);
 				} catch (IOException e) {
 					e.printStackTrace();
-				}    
+				} catch (OutOfMemoryError e) {
+					
+				}
 				runtime = System.currentTimeMillis() - startTime;
 				algo.printStatistics();
 
