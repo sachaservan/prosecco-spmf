@@ -3,3 +3,4 @@
 .settings/
 bin
 gson-2.6.2.jar
+.DS_Store
