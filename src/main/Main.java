@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -233,6 +234,10 @@ public class Main {
 			double errorTolerance, 
 			int numRuns,
 			SequentialPatterns correctPatterns) {
+		
+		// try to delete the file
+		File file = new File(outputFile);
+    	file.delete();
 
 		BenchmarkReport report = new BenchmarkReport(benchmarkID, blockSize, minsup, inputFile);
 
@@ -252,12 +257,11 @@ public class Main {
 
 				public void blockUpdate(SequentialPatterns patterns, int numTransactionsProcessed, long blockRuntime, double blockErrorBound) {
 
-
 					runtimePerBlock.add(blockRuntime);
 					errors.add(blockErrorBound);
 					int falsePositives = BenchmarkUtils.countFalsePositives(correctPatterns, patterns);
 					int falseNegatives = BenchmarkUtils.countFalseNegatives(correctPatterns, patterns);
-					SupportError err = BenchmarkUtils.countSupportErrors(correctPatterns, correctPatterns, dbSize, numTransactionsProcessed);
+					SupportError err = BenchmarkUtils.countSupportErrors(correctPatterns, patterns, dbSize, numTransactionsProcessed);
 					supportErrorsPerBlock.add(err);
 					falsePositivesPerBlock.add(falsePositives);
 					falseNegativesPerBlock.add(falseNegatives);
@@ -305,6 +309,10 @@ public class Main {
 			int dbSize, 
 			double errorTolerance, 
 			int numRuns) {
+		
+		// try to delete the file
+		File file = new File(outputFile);
+    	file.delete();
 
 		BenchmarkReport report = new BenchmarkReport(benchmarkID, blockSize, minsup, inputFile);
 
