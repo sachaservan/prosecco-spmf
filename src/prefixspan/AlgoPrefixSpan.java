@@ -114,6 +114,10 @@ public class AlgoPrefixSpan{
 		// record start time
 		startTime = System.currentTimeMillis();
 
+		patternCount =0;
+		MemoryLogger.getInstance().reset();
+		MemoryLogger.getInstance().checkMemory();
+		
 		// Load the sequence database
 		sequenceDatabase = new SequenceDatabase(); 
 		sequenceDatabase.loadFile(inputFile);
@@ -152,6 +156,8 @@ public class AlgoPrefixSpan{
 		// initialize variables for statistics
 		patternCount =0;
 		MemoryLogger.getInstance().reset();
+		MemoryLogger.getInstance().checkMemory();
+
 		// save the minsup chosen  by the user
 		this.minsuppAbsolute = minsup;
 		// save the start time
@@ -198,6 +204,8 @@ public class AlgoPrefixSpan{
 			isUsingFrequentItems = true;
 		}
 
+		MemoryLogger.getInstance().checkMemory();
+
 		this.sequenceDatabase = sequenceDatabase;
 		this.sequenceCount = sequenceDatabase.size();
 		this.minsuppAbsolute = minSup;
@@ -225,6 +233,9 @@ public class AlgoPrefixSpan{
 			// we use an optimize version of the same code
 			prefixspanWithSingleItems(mapSequenceID);	
 		}
+		
+		MemoryLogger.getInstance().checkMemory();
+
 
 		return this.patterns;
 	}
@@ -310,6 +321,8 @@ public class AlgoPrefixSpan{
 				}
 			}
 		}
+		
+		MemoryLogger.getInstance().checkMemory();
 	}
 
 
@@ -407,6 +420,8 @@ public class AlgoPrefixSpan{
 				}
 			}
 		}
+		
+		MemoryLogger.getInstance().checkMemory();
 	}
 
 	/**
@@ -1000,6 +1015,8 @@ public class AlgoPrefixSpan{
 	 * @param size  the size of the database
 	 */
 	public void printStatistics() {
+		MemoryLogger.getInstance().checkMemory();
+
 		StringBuilder r = new StringBuilder(200);
 		r.append("=============  PREFIXSPAN 0.99-2016 - STATISTICS =============\n Total time ~ ");
 		r.append(endTime - startTime);

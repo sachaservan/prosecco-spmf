@@ -103,6 +103,9 @@ public class Main {
 			runSPAM = true;
 		}
 		
+		if (doubleOptsList.contains("print")) {
+			print = true;
+		}
 		
 		if (doubleOptsList.contains("benchmarkMemory")) {
 			benchmarkMemory = true;
