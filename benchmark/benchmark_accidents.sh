@@ -1,6 +1,4 @@
 #!/bin/bash
-sleep 15
-
 
 # TODO: might need to have full path!
 
