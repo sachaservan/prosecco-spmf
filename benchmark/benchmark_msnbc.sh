@@ -6,7 +6,7 @@ java -jar -Xmx40G ProseccoBenchmark.jar -f "/home/ez/data/sequence/msnbc.txt" -s
 java -jar -Xmx40G ProseccoBenchmark.jar -f "/home/ez/data/sequence/msnbc.txt" -s 0.20 -z 10000 -d 3179000 -r "/usr/local/bin/shuf" -i "n_ps-msnbc-lg-0.20-10k" -o "./results/n_ps-msnbc-lg-0.20-10k_results_memory.json" -n 5 --benchmarkMemory --prosecco
 java -jar -Xmx40G ProseccoBenchmark.jar -f "/home/ez/data/sequence/msnbc.txt" -s 0.20 -z 10000 -d 3179000 -r "/usr/local/bin/shuf" -i "n_ps-msnbc-lg-0.20-10k_prefixspan" -o "./results/n_ps-msnbc-lg-0.20-10k_results_prefixspan.json" -n 5 --benchmarkRuntime --prefixspan
 
-java -jar -Xmx40G ProseccoBenchmark.jar -f "/home/ez/data/sequence/msnbc.txt" -s 0.30 -z 10000 -d 3179000 -r "/usr/local/bin/shuf" -i "n_ps-msnbc-lg-0.30-10k" -o "./results/n_ps-msnbc-lg-0.30.3-10k_results_runtime_correctness.json" -n 5 --benchmarkRuntime --prosecco
+java -jar -Xmx40G ProseccoBenchmark.jar -f "/home/ez/data/sequence/msnbc.txt" -s 0.30 -z 10000 -d 3179000 -r "/usr/local/bin/shuf" -i "n_ps-msnbc-lg-0.30-10k" -o "./results/n_ps-msnbc-lg-0.30-10k_results_runtime_correctness.json" -n 5 --benchmarkRuntime --prosecco
 java -jar -Xmx40G ProseccoBenchmark.jar -f "/home/ez/data/sequence/msnbc.txt" -s 0.30 -z 10000 -d 3179000 -r "/usr/local/bin/shuf" -i "n_ps-msnbc-lg-0.30-10k" -o "./results/n_ps-msnbc-lg-0.30-10k_results_memory.json" -n 5 --benchmarkMemory --prosecco
 java -jar -Xmx40G ProseccoBenchmark.jar -f "/home/ez/data/sequence/msnbc.txt" -s 0.30 -z 10000 -d 3179000 -r "/usr/local/bin/shuf" -i "n_ps-msnbc-lg-0.30-10k_prefixspan" -o "./results/n_ps-msnbc-lg-0.30-10k_results_prefixspan.json" -n 5 --benchmarkRuntime --prefixspan
 
