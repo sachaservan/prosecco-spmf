@@ -29,8 +29,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import main.BenchmarkUtils;
 import prefixspan.*;
 
 /*** 
@@ -108,10 +109,23 @@ public class AlgoSPAM{
 		writer = new BufferedWriter(new FileWriter(outputFilePath)); 
 		// initialize the number of patterns found
 		patternCount =0; 
+		
 		// to log the memory used
 		MemoryLogger.getInstance().reset(); 
-		
 		MemoryLogger.getInstance().checkMemory();
+		
+	       TimerTask timerTask = new TimerTask() {
+
+	            @Override
+	            public void run() {
+	        		MemoryLogger.getInstance().checkMemory();
+
+	            }
+	        };
+
+	        Timer timer = new Timer("MyTimer");//create a new Timer
+
+	        timer.scheduleAtFixedRate(timerTask, 1000, 1000);//this line starts the timer at the same time its executed
 
 		// record start time
 		startTime = System.currentTimeMillis(); 
@@ -134,8 +148,6 @@ public class AlgoSPAM{
 		// key: an item    value : bitmap
 		verticalDB = new HashMap<Integer, Bitmap>();
 		
-		MemoryLogger.getInstance().checkMemory();
-
 		
 		// STEP 0: SCAN THE DATABASE TO STORE THE FIRST BIT POSITION OF EACH SEQUENCE 
 		// AND CALCULATE THE TOTAL NUMBER OF BIT FOR EACH BITMAP
@@ -267,9 +279,6 @@ public class AlgoSPAM{
 			// items.
 			dfsPruning(prefix, entry.getValue(), frequentItems, frequentItems, entry.getKey(), 2);
 		}
-		
-		MemoryLogger.getInstance().checkMemory();
-
 	}
 	
 	/**
@@ -285,8 +294,6 @@ public class AlgoSPAM{
 	private void dfsPruning(Prefix prefix, Bitmap prefixBitmap, List<Integer> sn, List<Integer> in, int hasToBeGreaterThanForIStep, int m) throws IOException {
 //		System.out.println(prefix.toString());
 		
-		MemoryLogger.getInstance().checkMemory();
-
 		//  ======  S-STEPS ======
 		// Temporary variables (as described in the paper)
 		List<Integer> sTemp = new ArrayList<Integer>();
@@ -365,8 +372,6 @@ public class AlgoSPAM{
 				dfsPruning(prefixIStep, newBitmap, sTemp, iTemp, item, m+1);
 			}
 		}	
-		// check the memory usage
-		MemoryLogger.getInstance().checkMemory();
 	}
 
 	/**
@@ -441,6 +446,7 @@ public class AlgoSPAM{
 		r.append('\n');
 		r.append(" Max memory (mb) : " );
 		r.append(MemoryLogger.getInstance().getMaxMemory());
+		r.append("\n Memory usagE: " + MemoryLogger.getInstance().getMemoryUsage());
 		r.append(patternCount);
 		r.append('\n');		
 		r.append("minsup " + minsup);

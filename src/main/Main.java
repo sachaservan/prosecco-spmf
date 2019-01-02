@@ -468,13 +468,13 @@ public class Main {
 				AlgoSPAM algo = new AlgoSPAM(); 
 				try {
 					algo.runAlgorithm(inputFile, "/tmp/out.txt", minsup);
+					runtime = System.currentTimeMillis() - startTime;
+					algo.printStatistics();
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (OutOfMemoryError e) {
 					
 				}
-				runtime = System.currentTimeMillis() - startTime;
-				algo.printStatistics();
 
 			
 			BenchmarkRun run = new BenchmarkRun(

@@ -178,6 +178,7 @@ public class AlgoPrefixSpan{
 		if(writer != null){
 			writer.close();
 		}
+		MemoryLogger.getInstance().checkMemory();
 		return patterns;
 	}
 
@@ -1030,6 +1031,7 @@ public class AlgoPrefixSpan{
 		r.append('\n');
 		r.append(" Pattern count : ");
 		r.append(patternCount);
+		r.append("\n Memory usagE: " + MemoryLogger.getInstance().getMemoryUsage());
 		r.append('\n');
 		r.append("===================================================\n");
 		// if the result was save into memory, print it

@@ -43,7 +43,7 @@ public class MemoryLogger {
 		
 	private long startTime = 0;
 	
-	private Map<Long, Long> memoryUsage = new HashMap<Long, Long>();;
+	private Map<Long, Long> memoryUsage = new HashMap<Long, Long>();
 	
 	/**
 	 * Method to obtain the only instance of this class
