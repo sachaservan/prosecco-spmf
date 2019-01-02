@@ -450,6 +450,10 @@ public class Main {
 			double minsup, 
 			int numRuns) {
 
+		// try to delete the file
+		File file = new File(outputFile);
+    	file.delete();
+    	
 		BenchmarkReport report = new BenchmarkReport(benchmarkID, minsup, inputFile);
 
 		for (int i = 0; i < numRuns; i++) {
