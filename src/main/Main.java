@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import spam.*;
 import prefixspan.AlgoPrefixSpan;
@@ -453,6 +455,19 @@ public class Main {
 			double minsup, 
 			int numRuns) {
 
+       TimerTask timerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+        		MemoryLogger.getInstance().checkMemory();
+
+            }
+        };
+
+       Timer timer = new Timer("MyTimer");//create a new Timer
+       timer.scheduleAtFixedRate(timerTask, 1000, 1000);//this line starts the timer at the same time its executed
+
+	       
 		// try to delete the file
 		File file = new File(outputFile);
     	file.delete();
@@ -486,6 +501,7 @@ public class Main {
 			report.addRun(run);
 		}
 
+		timer.cancel();
 		BenchmarkUtils.saveBenchmarksToJSON(report, outputFile);
 	}
 

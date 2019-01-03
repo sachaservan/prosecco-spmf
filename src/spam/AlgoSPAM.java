@@ -90,9 +90,7 @@ public class AlgoSPAM{
 	
 	/** Optional parameter to decide whether sequence identifiers should be shown in the output for each pattern found */
 	private boolean outputSequenceIdentifiers; 
-		
-	Timer timer;
-	
+			
 	/**
 	 * Default constructor
 	 */
@@ -116,18 +114,6 @@ public class AlgoSPAM{
 		MemoryLogger.getInstance().reset(); 
 		MemoryLogger.getInstance().checkMemory();
 		
-	       TimerTask timerTask = new TimerTask() {
-
-	            @Override
-	            public void run() {
-	        		MemoryLogger.getInstance().checkMemory();
-
-	            }
-	        };
-
-	       timer = new Timer("MyTimer");//create a new Timer
-	       timer.scheduleAtFixedRate(timerTask, 1000, 1000);//this line starts the timer at the same time its executed
-
 		// record start time
 		startTime = System.currentTimeMillis(); 
 		// RUN THE ALGORITHM
@@ -136,7 +122,6 @@ public class AlgoSPAM{
 		endTime = System.currentTimeMillis(); 
 		// close the file
 		writer.close(); 
-		timer.cancel();
 	}
 	
 	/**
