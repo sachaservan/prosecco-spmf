@@ -229,24 +229,22 @@ def getRuntime(fn):
     return runtimes
     
 
-def main(runtimes, memory, id, file_id, title, show):
+def main(runtimes, memory, id, file_id, title, show, includeSpam):
     prosecco_runtime = '../results/n_ps-' + id + '-10k_results_runtime_correctness.json'
     prefixspan_runtime = '../results/n_ps-' + id + '-10k_results_prefixspan.json'
     spam_runtime = '../results/n_ps-' + id + '-10k_results_spam.json'
-    
-    inlcudeSpam = False
 
     # eval runtime
     runtimes_prosecco = getRuntime(prosecco_runtime)
     runtimes_prefixspan = getRuntime(prefixspan_runtime)
-    if inlcudeSpam:
+    if includeSpam:
         runtimes_spam = getRuntime(spam_runtime)
     
     print(title, np.mean(runtimes_prosecco), np.std(runtimes_prosecco), np.mean(runtimes_prefixspan), np.std(runtimes_prefixspan))
 
     runtimes['prefixspan'][title] = runtimes_prefixspan
     runtimes['prosecco'][title] = runtimes_prosecco
-    if inlcudeSpam:
+    if includeSpam:
         runtimes['spam'][title] = runtimes_spam
 
     tp = loadTruePositives(prosecco_runtime)
@@ -267,7 +265,7 @@ def main(runtimes, memory, id, file_id, title, show):
     df = df.sort_values(by=['time'])
     plot_ts(df, ax1, flatui[1], 'memory', 'time', -1, 'PrefixSpan', linestyle = ':')
 
-    if inlcudeSpam:
+    if includeSpam:
         d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_spam.json')
         memory['spam'][title] = mem
         df = pd.DataFrame(data=d)       
@@ -391,35 +389,36 @@ def main(runtimes, memory, id, file_id, title, show):
 
 if __name__== '__main__':
     show = False
+    includeSpam = False
     
     runtimes = {'prefixspan': {}, 'prosecco': {}, 'spam': {}}
     memory = {'prefixspan': {}, 'prosecco': {}, 'spam': {}}
 
     print('Dataset', 'PS-Mean', 'PS-STD', 'IPS-Mean', 'IPS-STD')
 
-    #(s, p) = main(runtimes, memory, 'accidents-lg-0.80', 'accidents-5-0_80', 'ACCIDENTS-0.80', show)
-    #(s, p) = main(runtimes, memory,'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show)
-    #(s, p) = main(runtimes, memory,'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show)
+    #(s, p) = main(runtimes, memory, 'accidents-lg-0.80', 'accidents-5-0_80', 'ACCIDENTS-0.80', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show, includeSpam)
 
-    #(s, p) = main(runtimes, memory,'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show)
-    #(s, p) = main(runtimes, memory,'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show)
-    #(s, p) = main(runtimes, memory,'bms-webview-lg-0.05', 'bms-webview-100-0_005', 'BMS-0.05', show)
+    (s, p) = main(runtimes, memory,'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show, includeSpam)
+    (s, p) = main(runtimes, memory,'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show, includeSpam)
+    (s, p) = main(runtimes, memory,'bms-webview-lg-0.05', 'bms-webview-100-0_005', 'BMS-0.05', show, includeSpam)
 
-    #(s, p) = main(runtimes, memory,'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show)
-    #(s, p) = main(runtimes, memory,'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show)
-    #(s, p) = main(runtimes, memory,'kosarak-lg-0.10', 'kosarak-50-0_10', 'KORSARAK-0.10', show)
+    #(s, p) = main(runtimes, memory,'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'kosarak-lg-0.10', 'kosarak-50-0_10', 'KORSARAK-0.10', show, includeSpam)
 
-    #(s, p) = main(runtimes, memory,'msnbc-lg-0.20', 'msnbc-200-0_20', 'MSNBC-0.20', show)
-    #(s, p) = main(runtimes, memory,'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show)
-    #(s, p) = main(runtimes, memory,'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show)
+    #(s, p) = main(runtimes, memory,'msnbc-lg-0.20', 'msnbc-200-0_20', 'MSNBC-0.20', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show, includeSpam)
     
-    (s, p) = main(runtimes, memory,'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show)
-    #(s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show)
-    #(s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show, includeSpam)
     
-    #(s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show)
-    #(s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show)
-    #(s, p) = main(runtimes, memory,'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show)
+    #(s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show, includeSpam)
 
     
     with open('runtimes.pickle', 'wb') as handle:
