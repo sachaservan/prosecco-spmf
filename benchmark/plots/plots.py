@@ -168,7 +168,6 @@ def loadNormalizedErrorData(fn):
         
         for i in range(len(supportErrors)):
             dat = [x * 100.0 for x in supportErrors[i]['normalizedErrors']]
-            print(np.mean(dat), len(dat))
             d['meanNormalizedError'].append(np.mean(dat))
             d['maxNormalizedError'].append(np.max(dat))
             d['batch'].append(i)
@@ -390,7 +389,7 @@ def main(runtimes, memory, id, file_id, title, show, includeSpam):
 
 if __name__== '__main__':
     show = True
-    includeSpam = False
+    includeSpam = True
     
     runtimes = {'prefixspan': {}, 'prosecco': {}, 'spam': {}}
     memory = {'prefixspan': {}, 'prosecco': {}, 'spam': {}}
@@ -414,8 +413,8 @@ if __name__== '__main__':
     #(s, p) = main(runtimes, memory,'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show, includeSpam)
     
     (s, p) = main(runtimes, memory,'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show, includeSpam)
-    #(s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show, includeSpam)
-    #(s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show, includeSpam)
+    (s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show, includeSpam)
+    (s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show, includeSpam)
     
     #(s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show, includeSpam)
     #(s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show, includeSpam)
