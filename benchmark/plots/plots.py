@@ -150,6 +150,8 @@ def loadAbsoluteErrorData(fn):
 
         for i in range(len(supportErrors)):
             dat = [x for x in supportErrors[i]['absoluteErrors']]
+            
+            print (i, np.mean(dat), np.mean(run['errors'][i]))
             d['meanAbsoluteError'].append(np.mean(dat))
             d['maxAbsoluteError'].append(np.max(dat))
             d['theoreticalAbsoluteError'].append(run['errors'][i])
@@ -412,13 +414,13 @@ if __name__== '__main__':
     #(s, p) = main(runtimes, memory,'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show, includeSpam)
     #(s, p) = main(runtimes, memory,'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show, includeSpam)
     
-    (s, p) = main(runtimes, memory,'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show, includeSpam)
-    (s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show, includeSpam)
-    (s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show, includeSpam)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show, includeSpam)
     
-    #(s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show, includeSpam)
-    #(s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show, includeSpam)
-    #(s, p) = main(runtimes, memory,'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show, includeSpam)
+    (s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show, includeSpam)
+    (s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show, includeSpam)
+    (s, p) = main(runtimes, memory,'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show, includeSpam)
 
     
     with open('runtimes.pickle', 'wb') as handle:
