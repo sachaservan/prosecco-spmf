@@ -52,15 +52,22 @@ def compute(dataset, fsize, name, showDivider):
     
     prosecco_means = []
     prosecco_std = []
+
     prefixspan_means = []
     prefixspan_std = []
 
+    spam_means = []
+    spam_std = []
+
     prefixspan = runtimes['prefixspan']
     prosecco = runtimes['prosecco']
+    spam = runtimes['spam']
+
     allprosecco = []
     allprefixspan = []
+    allspam = []
+
     for ds in datasets:
-        print(prefixspan)
         r_ps = prefixspan[ds]
 
         allprefixspan.append(r_ps)
@@ -75,10 +82,18 @@ def compute(dataset, fsize, name, showDivider):
         b = np.array(r_pr).std() / math.sqrt(len(r_pr))
         prosecco_std.append(1.96 * b)
 
+        r_sp = spam[ds]
+
+        allspam.append(r_sp)
+        spam_means.append(np.array(r_sp).mean())    
+        b = np.array(r_sp).std() / math.sqrt(len(r_sp))
+        spam_std.append(1.96 * b)
+
     print(datasets)
     print('prosecco = ' + '{:.2f}'.format(np.array(allprosecco).mean() / 1000.0))
     print('prefixsp = ' + '{:.2f}'.format(np.array(allprefixspan).mean() / 1000.0))
-    print(len(prosecco_std), len(prefixspan_std))
+    print('spam = ' + '{:.2f}'.format(np.array(allspam).mean() / 1000.0))
+    print(len(prosecco_std), len(prefixspan_std), len(spam_std))
 
 
     ind = np.arange(len(prosecco_means))  # the x locations for the groups
@@ -92,13 +107,14 @@ def compute(dataset, fsize, name, showDivider):
                     color=flatui[0], label='ProSecCo')
     rects2 = ax.bar(ind, prefixspan_means, width, yerr=prefixspan_std,
                     color=flatui[1], label='PrefixSpan', hatch='//')
-    rects3 = ax.bar(ind + width, prefixspan_means, width, yerr=prefixspan_std,
+    rects3 = ax.bar(ind + width, spam_means, width, yerr=spam_std,
                     color=flatui[2], label='SPAM', hatch='\\\\')
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('Total Runtime (s)')
     ax.set_xticks(ind)
-    m = int(max(np.array(allprosecco).max(), np.array(allprefixspan).max()) * 1.3 / 10000) * 10000
+    m = int(max(np.array(allprosecco).max(), np.array(allprefixspan).max(), np.array(allspam).max()) * 1.05 / 10000) * 10000
+    #m = 800
     print(m)
     ax.set_ylim([0.0, m])
 
@@ -116,11 +132,11 @@ def compute(dataset, fsize, name, showDivider):
         if showDivider:
             if i % 3 == 0:
                 x = i -w - w/2
-                y = -28000
+                y = -128000
                 plt.plot([x, x], [0, y], 'k-', lw=0.5, color='.8', clip_on=False)
             if i % 3 == 2:
                 x = i + w + w/2
-                y = -28000
+                y = -128000
                 plt.plot([x, x], [0, y], 'k-', lw=0.5, color='.8', clip_on=False)
             
     ax.xaxis.grid(False)
