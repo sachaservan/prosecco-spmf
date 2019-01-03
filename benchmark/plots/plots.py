@@ -397,29 +397,29 @@ if __name__== '__main__':
 
     print('Dataset', 'PS-Mean', 'PS-STD', 'IPS-Mean', 'IPS-STD')
 
-    (s, p) = main(runtimes, memory, 'accidents-lg-0.80', 'accidents-5-0_80', 'ACCIDENTS-0.80', show)
-    (s, p) = main(runtimes, memory,'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show)
-    (s, p) = main(runtimes, memory,'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show)
+    #(s, p) = main(runtimes, memory, 'accidents-lg-0.80', 'accidents-5-0_80', 'ACCIDENTS-0.80', show)
+    #(s, p) = main(runtimes, memory,'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show)
+    #(s, p) = main(runtimes, memory,'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show)
 
-    (s, p) = main(runtimes, memory,'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show)
-    (s, p) = main(runtimes, memory,'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show)
-    (s, p) = main(runtimes, memory,'bms-webview-lg-0.05', 'bms-webview-100-0_005', 'BMS-0.05', show)
+    #(s, p) = main(runtimes, memory,'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show)
+    #(s, p) = main(runtimes, memory,'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show)
+    #(s, p) = main(runtimes, memory,'bms-webview-lg-0.05', 'bms-webview-100-0_005', 'BMS-0.05', show)
 
-    (s, p) = main(runtimes, memory,'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show)
-    (s, p) = main(runtimes, memory,'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show)
-    (s, p) = main(runtimes, memory,'kosarak-lg-0.10', 'kosarak-50-0_10', 'KORSARAK-0.10', show)
+    #(s, p) = main(runtimes, memory,'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show)
+    #(s, p) = main(runtimes, memory,'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show)
+    #(s, p) = main(runtimes, memory,'kosarak-lg-0.10', 'kosarak-50-0_10', 'KORSARAK-0.10', show)
 
-    (s, p) = main(runtimes, memory,'msnbc-lg-0.20', 'msnbc-200-0_20', 'MSNBC-0.20', show)
-    (s, p) = main(runtimes, memory,'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show)
-    (s, p) = main(runtimes, memory,'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show)
+    #(s, p) = main(runtimes, memory,'msnbc-lg-0.20', 'msnbc-200-0_20', 'MSNBC-0.20', show)
+    #(s, p) = main(runtimes, memory,'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show)
+    #(s, p) = main(runtimes, memory,'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show)
     
     (s, p) = main(runtimes, memory,'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show)
-    (s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show)
-    (s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show)
+    #(s, p) = main(runtimes, memory,'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show)
     
-    (s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show)
-    (s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show)
-    (s, p) = main(runtimes, memory,'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show)
+    #(s, p) = main(runtimes, memory,'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show)
+    #(s, p) = main(runtimes, memory,'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show)
+    #(s, p) = main(runtimes, memory,'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show)
 
     
     with open('runtimes.pickle', 'wb') as handle:
