@@ -82,15 +82,18 @@ def compute(dataset, fsize, name, showDivider):
 
 
     ind = np.arange(len(prosecco_means))  # the x locations for the groups
-    width = 0.35  # the width of the bars
+    width = 0.25  # the width of the bars
 
     f, (ax) = plt.subplots(1, 1, sharey=False, figsize=fsize) 
     #f.subplots_adjust(bottom=0.3)
 
-    rects1 = ax.bar(ind - width/2, prosecco_means, width, yerr=prosecco_std,
+    w3 = width / 3
+    rects1 = ax.bar(ind - width, prosecco_means, width, yerr=prosecco_std,
                     color=flatui[0], label='ProSecCo')
-    rects2 = ax.bar(ind + width/2, prefixspan_means, width, yerr=prefixspan_std,
+    rects2 = ax.bar(ind, prefixspan_means, width, yerr=prefixspan_std,
                     color=flatui[1], label='PrefixSpan', hatch='//')
+    rects3 = ax.bar(ind + width, prefixspan_means, width, yerr=prefixspan_std,
+                    color=flatui[2], label='SPAM', hatch='\\\\')
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('Total Runtime (s)')
@@ -112,11 +115,11 @@ def compute(dataset, fsize, name, showDivider):
         w = rects1[0].get_width()
         if showDivider:
             if i % 3 == 0:
-                x = i -w
+                x = i -w - w/2
                 y = -28000
                 plt.plot([x, x], [0, y], 'k-', lw=0.5, color='.8', clip_on=False)
             if i % 3 == 2:
-                x = i + w
+                x = i + w + w/2
                 y = -28000
                 plt.plot([x, x], [0, y], 'k-', lw=0.5, color='.8', clip_on=False)
             
