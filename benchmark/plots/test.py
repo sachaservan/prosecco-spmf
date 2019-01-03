@@ -30,7 +30,7 @@ for m in runtimes:
 
 print("runtimes in s")
 for m in runtimes_comb:
-    print("  ", m, "mean=", np.mean(runtimes_comb[m]), "std=", np.std(runtimes_comb[m]))
+    print("  ", m, "mean=", np.mean(runtimes_comb[m]), "std=", np.std(runtimes_comb[m]), "max=", np.max(runtimes_comb[m]))
 
 
 memory_comb = {'prefixspan': [], 'prosecco': [], 'spam': []}
@@ -44,5 +44,5 @@ for m in memory:
 
 print("memory in MB")
 for m in memory_comb:
-    print("  ", m, "mean=", np.mean(memory_comb[m]), "std=", np.std(memory_comb[m]))
+    print("  ", m, "mean=", np.mean(memory_comb[m]), "std=", np.std(memory_comb[m]), "max=", np.max(memory_comb[m]))
 

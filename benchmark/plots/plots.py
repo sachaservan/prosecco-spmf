@@ -300,8 +300,15 @@ def main(runtimes, memory, id, file_id, title, show, includeSpam):
     d = loadNormalizedErrorData(prosecco_runtime)
     df = pd.DataFrame(data=d)   
     df = df.sort_values(by=['batch'])
-    plot_ts(df, ax2, flatui[0], 'meanNormalizedError', 'batch', 1, 'Mean', '-')
-    plot_ts(df, ax2, flatui[0], 'maxNormalizedError', 'batch', 1, 'Max', ':', True)
+    w = 1
+    if len(df) > 300:
+        w = 5
+    if len(df) > 600: 
+        w = 10
+    if len(df) > 1200: 
+        w = 15
+    plot_ts(df, ax2, flatui[0], 'meanNormalizedError', 'batch', w, 'Mean', '-')
+    plot_ts(df, ax2, flatui[0], 'maxNormalizedError', 'batch', w, 'Max', ':', True)
    
     ax2.set_ylabel('Relative Percentage Error')
     ax2.set_xlabel('Block')
