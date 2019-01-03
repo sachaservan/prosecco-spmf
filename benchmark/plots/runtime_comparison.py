@@ -75,10 +75,10 @@ def compute(dataset, fsize, name, showDivider):
         b = np.array(r_pr).std() / math.sqrt(len(r_pr))
         prosecco_std.append(1.96 * b)
 
+    print(datasets)
     print('prosecco = ' + '{:.2f}'.format(np.array(allprosecco).mean() / 1000.0))
     print('prefixsp = ' + '{:.2f}'.format(np.array(allprefixspan).mean() / 1000.0))
     print(len(prosecco_std), len(prefixspan_std))
-    print(datasets)
 
 
     ind = np.arange(len(prosecco_means))  # the x locations for the groups
