@@ -240,15 +240,13 @@ def main(runtimes, memory, id, file_id, title, show, includeSpam):
     # eval runtime
     runtimes_prosecco = getRuntime(prosecco_runtime)
     runtimes_prefixspan = getRuntime(prefixspan_runtime)
-    if includeSpam:
-        runtimes_spam = getRuntime(spam_runtime)
+    runtimes_spam = getRuntime(spam_runtime)
     
     print(title, np.mean(runtimes_prosecco), np.std(runtimes_prosecco), np.mean(runtimes_prefixspan), np.std(runtimes_prefixspan))
 
     runtimes['prefixspan'][title] = runtimes_prefixspan
     runtimes['prosecco'][title] = runtimes_prosecco
-    if includeSpam:
-        runtimes['spam'][title] = runtimes_spam
+    runtimes['spam'][title] = runtimes_spam
 
     tp = loadTruePositives(prosecco_runtime)
     file_id = file_id + '-' + str(tp)
@@ -268,9 +266,9 @@ def main(runtimes, memory, id, file_id, title, show, includeSpam):
     df = df.sort_values(by=['time'])
     plot_ts(df, ax1, flatui[1], 'memory', 'time', -1, 'PrefixSpan', linestyle = ':')
 
+    d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_spam.json')
+    memory['spam'][title] = mem
     if includeSpam:
-        d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_spam.json')
-        memory['spam'][title] = mem
         df = pd.DataFrame(data=d)       
         df = df.sort_values(by=['time'])
         plot_ts(df, ax1, flatui[2], 'memory', 'time', -1, 'SPAM', linestyle = ':')
@@ -410,25 +408,25 @@ if __name__== '__main__':
     (s, p) = main(runtimes, memory, 'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show, includeSpam)
     (s, p) = main(runtimes, memory, 'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show, includeSpam)
 
-    (s, p) = main(runtimes, memory, 'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show, includeSpam)
+    (s, p) = main(runtimes, memory, 'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show, False)
     (s, p) = main(runtimes, memory, 'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show, includeSpam)
     (s, p) = main(runtimes, memory, 'bms-webview-lg-0.05', 'bms-webview-100-0_005', 'BMS-0.05', show, includeSpam)
 
-    (s, p) = main(runtimes, memory, 'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show, includeSpam)
-    (s, p) = main(runtimes, memory, 'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show, includeSpam)
-    (s, p) = main(runtimes, memory, 'kosarak-lg-0.10', 'kosarak-50-0_10', 'KORSARAK-0.10', show, includeSpam)
+    (s, p) = main(runtimes, memory, 'kosarak-lg-0.025', 'kosarak-50-0_025', 'KORSARAK-0.025', show, False)
+    (s, p) = main(runtimes, memory, 'kosarak-lg-0.05', 'kosarak-50-0_05', 'KORSARAK-0.05', show, False)
+    (s, p) = main(runtimes, memory, 'kosarak-lg-0.10', 'kosarak-50-0_10', 'KORSARAK-0.10', show, False)
 
     (s, p) = main(runtimes, memory, 'msnbc-lg-0.20', 'msnbc-200-0_20', 'MSNBC-0.20', show, includeSpam)
     (s, p) = main(runtimes, memory, 'msnbc-lg-0.30', 'msnbc-200-0_30', 'MSNBC-0.30', show, includeSpam)
     (s, p) = main(runtimes, memory, 'msnbc-lg-0.40', 'msnbc-200-0_40', 'MSNBC-0.40', show, includeSpam)
     
-    (s, p) = main(runtimes, memory, 'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show, includeSpam)
-    (s, p) = main(runtimes, memory, 'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show, includeSpam)
-    (s, p) = main(runtimes, memory, 'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show, includeSpam)
+    (s, p) = main(runtimes, memory, 'bible-lg-0.40', 'bible-200-0_40', 'BIBLE-0.40', show, False)
+    (s, p) = main(runtimes, memory, 'bible-lg-0.50', 'bible-200-0_50', 'BIBLE-0.50', show, False)
+    (s, p) = main(runtimes, memory, 'bible-lg-0.60', 'bible-200-0_60', 'BIBLE-0.60', show, False)
     
     (s, p) = main(runtimes, memory, 'fifa-lg-0.30', 'fifa-50-0_30', 'FIFA-0.30', show, includeSpam)
     (s, p) = main(runtimes, memory, 'fifa-lg-0.35', 'fifa-50-0_35', 'FIFA-0.35', show, includeSpam)
-    (s, p) = main(runtimes, memory, 'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show, includeSpam)
+    (s, p) = main(runtimes, memory, 'fifa-lg-0.40', 'fifa-50-0_40', 'FIFA-0.40', show, False)
 
     
     with open('runtimes.pickle', 'wb') as handle:
