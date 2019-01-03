@@ -234,16 +234,20 @@ def main(runtimes, memory, id, file_id, title, show):
     prefixspan_runtime = '../results/n_ps-' + id + '-10k_results_prefixspan.json'
     spam_runtime = '../results/n_ps-' + id + '-10k_results_spam.json'
     
+    inlcudeSpam = False
+
     # eval runtime
     runtimes_prosecco = getRuntime(prosecco_runtime)
     runtimes_prefixspan = getRuntime(prefixspan_runtime)
-    runtimes_prefixspan = getRuntime(spam_runtime)
+    if inlcudeSpam:
+        runtimes_spam = getRuntime(spam_runtime)
     
     print(title, np.mean(runtimes_prosecco), np.std(runtimes_prosecco), np.mean(runtimes_prefixspan), np.std(runtimes_prefixspan))
 
     runtimes['prefixspan'][title] = runtimes_prefixspan
     runtimes['prosecco'][title] = runtimes_prosecco
-    runtimes['spam'][title] = runtimes_prefixspan
+    if inlcudeSpam:
+        runtimes['spam'][title] = runtimes_spam
 
     tp = loadTruePositives(prosecco_runtime)
     file_id = file_id + '-' + str(tp)
@@ -263,11 +267,12 @@ def main(runtimes, memory, id, file_id, title, show):
     df = df.sort_values(by=['time'])
     plot_ts(df, ax1, flatui[1], 'memory', 'time', -1, 'PrefixSpan', linestyle = ':')
 
-    d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_spam.json')
-    memory['spam'][title] = mem
-    df = pd.DataFrame(data=d)       
-    df = df.sort_values(by=['time'])
-    plot_ts(df, ax1, flatui[2], 'memory', 'time', -1, 'SPAM', linestyle = ':')
+    if inlcudeSpam:
+        d, mem = loadMemoryData('../results/n_ps-' + id + '-10k_results_spam.json')
+        memory['spam'][title] = mem
+        df = pd.DataFrame(data=d)       
+        df = df.sort_values(by=['time'])
+        plot_ts(df, ax1, flatui[2], 'memory', 'time', -1, 'SPAM', linestyle = ':')
 
     ax1.set_ylabel('Memory (GB)')
     ax1.set_xlabel('Time (mm:ss)')
@@ -395,8 +400,6 @@ if __name__== '__main__':
     (s, p) = main(runtimes, memory, 'accidents-lg-0.80', 'accidents-5-0_80', 'ACCIDENTS-0.80', show)
     (s, p) = main(runtimes, memory,'accidents-lg-0.85', 'accidents-5-0_85', 'ACCIDENTS-0.85', show)
     (s, p) = main(runtimes, memory,'accidents-lg-0.90', 'accidents-5-0_90', 'ACCIDENTS-0.90', show)
-
-    print(memory['spam']["ACCIDENTS-0.85"])
 
     (s, p) = main(runtimes, memory,'bms-webview-lg-0.01', 'bms-webview-100-0_001', 'BMS-0.01', show)
     (s, p) = main(runtimes, memory,'bms-webview-lg-0.025', 'bms-webview-100-0_025', 'BMS-0.025', show)
