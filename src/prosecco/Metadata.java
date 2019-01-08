@@ -40,6 +40,12 @@ public class Metadata {
     private boolean topK;
     
     private long capacity;
+    
+    private int blockSize;
+    
+    private int numberOfCapacityUpdates = 0;
+    
+    private boolean useDIndexBound = false;
         
     
     // current number of iterations (batches) processed
@@ -49,23 +55,32 @@ public class Metadata {
    
     // keep a sorted priority list of transactions for computing the capacity of a block
     private List<Transaction> capSequences;
+    private List<Transaction> longestSequences;
     
     private long sIndex;
-    
+    private long dIndex;
+
     public Metadata(double errorTolerance, boolean topK, int blockSize, int dbSize) {
         this.errorTolerance = errorTolerance;
         this.dbSize = dbSize;
+        this.blockSize = blockSize;
         this.numBlocks = (int)Math.ceil(dbSize/(float)blockSize);
         this.topK = topK;
         this.capSequences = new ArrayList<Transaction>();
+        this.longestSequences = new ArrayList<Transaction>();
     }
     
     
     public void UpdateWithSequence(int[] seq, int numItems) {
         numSequencesProcessed++;
- 
+        
+        if (numberOfCapacityUpdates <= blockSize || useDIndexBound) {
+	        // update d-index in case we use it later.
+	        UpdateDIndexWithSequence(seq, numItems);
+        }
+        
         // check if the transaction should be considered
-        if ((long) Math.pow(2, numItems) > (long) Math.pow(2, sIndex))  
+        if (!useDIndexBound && Math.pow(2, numItems) > (long) Math.pow(2, sIndex))  
         {   
 	        long c = getCapBound(seq);  
 	        capacity = c;
@@ -76,48 +91,60 @@ public class Metadata {
             	capSequences.remove(0);
             }
             
-            sIndex = capSequences.size();
+            numberOfCapacityUpdates++;
+            if (numberOfCapacityUpdates >= blockSize) {
+            	useDIndexBound = true;
+            }
+            
+//        System.out.println(Long.toString((long) Math.pow(2, numItems)-1) + " > " 
+//        		+ Long.toString((long) Math.pow(2, sIndex)));
+//            sIndex = capSequences.size();
 //   		System.out.println(" sIndex: " + Long.toString(sIndex));
 //   		System.out.println(" new capacity: " + Long.toString(capacity));
-        } 
+        } else if (useDIndexBound){
+        	sIndex = dIndex;
+        }
         
     }
     
-    public void UpdateWithSequenceDIndex(int[] seq, int numItems) {
-        numSequencesProcessed++;
+    public boolean UpdateDIndexWithSequence(int[] seq, int numItems) {
+    	
+    	 long oldDIndex = dIndex;
 
-    	 if (numItems > sIndex)  
+    	 if (numItems > dIndex)  
          {   
     		Transaction trans = new Transaction(seq, numItems, numItems);
     		
-    		if (!capSequences.contains(trans)) {
+    		if (!longestSequences.contains(trans)) {
     			
-	 	        capSequences.add(new Transaction(seq, numItems, numItems));
-	            Collections.sort(capSequences);
+    			longestSequences.add(new Transaction(seq, numItems, numItems));
+	            Collections.sort(longestSequences);
 	
-	             sIndex = 1;
+	             dIndex = 1;
 	 
 	             // update the set of transactions
-	             for(int i = capSequences.size() - 1; i >= 0; i--) 
+	             for(int i = longestSequences.size() - 1; i >= 0; i--) 
 	             {
-	                 if (sIndex > capSequences.get(i).numItems)
+	                 if (dIndex > longestSequences.get(i).numItems)
 	                     break;
 	                 
-	                 sIndex++;
+	                 dIndex++;
 	             }
 	             
 	             
-	             sIndex--;
+	             dIndex--;
 	             
-	             for(int i = capSequences.size() - 1; i >= 0; i--) 
+	             for(int i = longestSequences.size() - 1; i >= 0; i--) 
 	             {
-	            	   if (i + 1 > sIndex)
-	                       capSequences.remove(i);
+	            	   if (i + 1 > dIndex)
+	            		   longestSequences.remove(i);
 	                   else
 	                       break;
 	             }
     		}
          } 
+    	 
+    	 return oldDIndex != dIndex;
     }
     
     public double GetError() {
